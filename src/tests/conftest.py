@@ -3,6 +3,7 @@ from src import create_app, db
 import os
 from src.api.models import User
 
+
 @pytest.fixture(scope='module')
 def test_app():
     # set the environment variable for testing config
@@ -10,14 +11,16 @@ def test_app():
     app = create_app()
     app.config.from_object('src.config.TestingConfig')
     with app.app_context():
-        yield app # testing happens here
+        yield app  # testing happens here
+
 
 @pytest.fixture(scope='function')
 def test_database():
     db.create_all()
-    yield db # testing happens here
+    yield db  # testing happens here
     db.session.remove()
     db.drop_all()
+
 
 @pytest.fixture(scope='function')
 def add_user():

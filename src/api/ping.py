@@ -12,4 +12,5 @@ class Ping(Resource):
             'message': 'ping pong.....!'
         }
 
+
 api.add_resource(Ping, '/ping')
