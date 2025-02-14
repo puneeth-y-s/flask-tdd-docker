@@ -41,6 +41,7 @@ jobs:
             --file ./Dockerfile.prod \
             .
 
+
       - name: Push Docker image to GitHub Container Registry
         run: |
           docker push ghcr.io/${{ github.repository }}:latest
