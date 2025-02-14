@@ -27,6 +27,7 @@ jobs:
         with:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ghcr.io
 
       - name: Pull Docker image
         run: |
