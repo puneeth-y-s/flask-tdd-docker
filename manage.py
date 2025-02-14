@@ -1,8 +1,15 @@
 from flask.cli import FlaskGroup
-from src import app
-from src import app, db
+from src import db, create_app
+from src.api.models import User
 
-cli = FlaskGroup(app)
+app = create_app()
+cli = FlaskGroup(create_app=create_app)
+
+@cli.command('seed_db')
+def seed_db():
+    db.session.add(User(username="Jaa", email="jaa@gmail.com"))
+    db.session.add(User(username="Lee", email="lee@gmail.com"))
+    db.session.commit()
 
 @cli.command('recreate_db')
 def recreate_db():
