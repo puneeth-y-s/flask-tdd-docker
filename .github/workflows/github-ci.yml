@@ -97,15 +97,20 @@ jobs:
       image: ghcr.io/${{ github.repository }}:latest  # Use the image built in the build stage
       options: --privileged  # Enable privileged mode for PostgreSQL to run inside the container
 
+    env:
+      POSTGRES_DB: users
+      POSTGRES_USER: runner
+      POSTGRES_PASSWORD: runner
+      DATABASE_URL: postgresql://runner:runner@postgres:5432/users  # PostgreSQL service URL
+      DATABASE_TEST_URL: postgresql://runner:runner@postgres:5432/users  # PostgreSQL service URL
+
     services:
       postgres:
         image: postgres:latest
-        env:
-          POSTGRES_DB: users
-          POSTGRES_USER: runner
-          POSTGRES_PASSWORD: runner
-          DATABASE_URL: postgresql://runner:runner@postgres:5432/users  # PostgreSQL service URL
-          DATABASE_TEST_URL: postgresql://runner:runner@postgres:5432/users  # PostgreSQL service URL
+        # env:
+        #   POSTGRES_DB: users
+        #   POSTGRES_USER: runner
+        #   POSTGRES_PASSWORD: runner
         ports:
           - 5432:5432
 
