@@ -93,16 +93,10 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    depends: build
     container:
       image: ghcr.io/${{ github.repository }}:latest  # Use the image built in the build stage
       options: --privileged  # Enable privileged mode for PostgreSQL to run inside the container
-
-    env:
-      POSTGRES_DB: users
-      POSTGRES_USER: runner
-      POSTGRES_PASSWORD: runner
-      DATABASE_URL: postgresql://runner:runner@postgres:5432/users  # PostgreSQL service URL
-      DATABASE_TEST_URL: postgresql://runner:runner@postgres:5432/users  # PostgreSQL service URL
 
     services:
       postgres:
@@ -114,24 +108,26 @@ jobs:
         ports:
           - 5432:5432
 
+    env:
+      POSTGRES_DB: users
+      POSTGRES_USER: runner
+      POSTGRES_PASSWORD: runner
+      DATABASE_URL: postgresql://runner:runner@postgres:5432/users  # PostgreSQL service URL
+      DATABASE_TEST_URL: postgresql://runner:runner@postgres:5432/users  # PostgreSQL service URL
+
     steps:
       # - name: Check container's file structure
       #   run: |
       #     ls -R /usr/src/app
 
-      - name: Run tests
+      - name: Run tests inside the container
         run: |
           cd /usr/src/app
+
+          # Run the tests
           python -m pytest "src/tests" -p no:warnings
-
-      - name: Run flake8
-        run: |
+          
+          # Run code style checks (flake8, black, isort)
           python -m flake8 src
-
-      - name: Run black check
-        run: |
           python -m black src --check
-
-      - name: Run isort check
-        run: |
           python -m isort src --check-only
