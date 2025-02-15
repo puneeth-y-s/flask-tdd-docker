@@ -94,47 +94,37 @@ jobs:
   test:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/${{ github.repository }}:latest  # Use the image created in the build stage
-      options: --privileged  # Enable privileged mode to allow PostgreSQL to run
+      image: ghcr.io/${{ github.repository }}:latest  # Use the image built in the build stage
+      options: --privileged  # Enable privileged mode for PostgreSQL to run inside the container
+
+    env:
+      POSTGRES_DB: users
+      POSTGRES_USER: runner
+      POSTGRES_PASSWORD: runner
+      DATABASE_URL: postgresql://runner:runner@postgres:5432/users  # PostgreSQL service URL
+      DATABASE_TEST_URL: postgresql://runner:runner@postgres:5432/users  # PostgreSQL service URL
 
     services:
       postgres:
-        image: postgres:latest  # Use the official PostgreSQL image as a service
-        ports:
-          - 5432:5432  # Expose PostgreSQL port
+        image: postgres:latest
         env:
           POSTGRES_DB: users
           POSTGRES_USER: runner
           POSTGRES_PASSWORD: runner
-        options: --health-cmd="pg_isready -U runner" --health-interval=5s --health-timeout=10s --health-retries=5
-
-    env:
-      # Connection details to PostgreSQL
-      DATABASE_URL: postgresql://runner:runner@localhost:5432/users
-      DATABASE_TEST_URL: postgresql://runner:runner@localhost:5432/users
+        ports:
+          - 5432:5432
 
     steps:
-      - name: Run pwd and list files
+      - name: Run tests inside the container
         run: |
-          echo "Current working directory:"
+          # Print the current working directory and files in the container
           pwd
-          echo "Listing files in the current directory:"
           ls -la
-          ls ./ -la
-          ls ../ -la
-
-      - name: Run tests
-        run: |
+          
+          # Run the tests
           python -m pytest "src/tests" -p no:warnings
-
-      - name: Run flake8
-        run: |
+          
+          # Run code style checks (flake8, black, isort)
           python -m flake8 src
-
-      - name: Run black check
-        run: |
           python -m black src --check
-
-      - name: Run isort check
-        run: |
           python -m isort src --check-only
