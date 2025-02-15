@@ -120,6 +120,8 @@ jobs:
           pwd
           echo "Listing files in the current directory:"
           ls -la
+          cd ..
+          ls -la
 
       - name: Run tests
         run: |
