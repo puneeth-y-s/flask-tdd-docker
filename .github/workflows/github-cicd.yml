@@ -106,7 +106,7 @@ jobs:
         options: --privileged
     env:
       HEROKU_APP_NAME: hidden-ocean-12299
-      HEROKU_REGISTRY_IMAGE: registry.heroku.com/$HEROKU_APP_NAME/web
+      HEROKU_REGISTRY_IMAGE: registry.heroku.com/hidden-ocean-12299/web
     steps:
       # 1. Checkout the code
       - name: Checkout code
