@@ -92,13 +92,24 @@ jobs:
   #         python -m isort src --check-only
   test:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_DB: users
+          POSTGRES_USER: runner
+          POSTGRES_PASSWORD: runner
+        ports:
+          - 5432:5432  # Expose PostgreSQL on port 5432 for testing
+        options: --health-cmd="pg_isready -U runner" --health-interval=5s --health-timeout=2s --health-retries=5
+
     container:
-      image: ghcr.io/${{ github.repository }}:latest  # Run the tests inside the container with PostgreSQL
-      options: --privileged  # Enable privileged mode to allow PostgreSQL to run inside the container
+      image: ghcr.io/${{ github.repository }}:latest  # Use the image from GitHub Container Registry
+      options: --privileged  # Allow the container to have elevated privileges if needed
 
     env:
-      DATABASE_URL: postgresql://runner:runner@localhost:5432/users  # Connect to PostgreSQL inside the container
-      DATABASE_TEST_URL: postgresql://runner:runner@localhost:5432/users
+      DATABASE_URL: postgresql://runner:runner@postgres:5432/users  # Connect to the PostgreSQL service inside the container
+      DATABASE_TEST_URL: postgresql://runner:runner@postgres:5432/users
 
     steps:
       - name: Checkout code
