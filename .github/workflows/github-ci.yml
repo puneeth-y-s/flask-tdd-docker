@@ -45,51 +45,6 @@ jobs:
         run: |
           docker push ghcr.io/${{ github.repository }}:latest
 
-  # test:
-  #   runs-on: ubuntu-latest
-  #   services:
-  #     postgres:
-  #       image: postgres:latest
-  #       env:
-  #         POSTGRES_DB: users
-  #         POSTGRES_USER: runner
-  #         POSTGRES_PASSWORD: runner
-  #       ports:
-  #         - 5432:5432
-  #       options: --health-cmd="pg_isready -U runner -d users" --health-interval=10s --health-timeout=5s --health-retries=3
-    
-  #   env:
-  #     DATABASE_URL: postgresql://runner:runner@localhost:5432/users
-  #     DATABASE_TEST_URL: postgresql://runner:runner@localhost:5432/users
-
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v2
-
-  #     - name: Set up Python
-  #       uses: actions/setup-python@v2
-  #       with:
-  #         python-version: '3.12'
-
-  #     - name: Install dependencies
-  #       run: |
-  #         pip install -r requirements.txt
-
-  #     - name: Run tests
-  #       run: |
-  #         python -m pytest "src/tests" -p no:warnings
-
-  #     - name: Run flake8
-  #       run: |
-  #         python -m flake8 src
-
-  #     - name: Run black check
-  #       run: |
-  #         python -m black src --check
-
-  #     - name: Run isort check
-  #       run: |
-  #         python -m isort src --check-only
   test:
     runs-on: ubuntu-latest
     services:
@@ -100,16 +55,12 @@ jobs:
           POSTGRES_USER: runner
           POSTGRES_PASSWORD: runner
         ports:
-          - 5432:5432  # Expose PostgreSQL on port 5432 for testing
-        options: --health-cmd="pg_isready -U runner" --health-interval=5s --health-timeout=2s --health-retries=5
-
-    container:
-      image: ghcr.io/${{ github.repository }}:latest  # Use the image from GitHub Container Registry
-      options: --privileged  # Allow the container to have elevated privileges if needed
-
+          - 5432:5432
+        options: --health-cmd="pg_isready -U runner -d users" --health-interval=10s --health-timeout=5s --health-retries=3
+    
     env:
-      DATABASE_URL: postgresql://runner:runner@postgres:5432/users  # Connect to the PostgreSQL service inside the container
-      DATABASE_TEST_URL: postgresql://runner:runner@postgres:5432/users
+      DATABASE_URL: postgresql://runner:runner@localhost:5432/users
+      DATABASE_TEST_URL: postgresql://runner:runner@localhost:5432/users
 
     steps:
       - name: Checkout code
