@@ -102,6 +102,15 @@ jobs:
       DATABASE_TEST_URL: postgresql://runner:runner@localhost:5432/users
 
     steps:
+      - name: Print working directory
+        run: |
+          pwd
+          ls -la
+
+      - name: Fix permissions
+        run: |
+          chmod -R 755 src/tests
+
       - name: Run tests
         run: |
           python -m pytest "src/tests" -p no:warnings
