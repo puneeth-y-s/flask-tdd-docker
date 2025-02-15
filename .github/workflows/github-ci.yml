@@ -72,7 +72,7 @@ jobs:
 
       - name: Run tests
         run: |
-          python -m pytest "app/src/tests" -p no:warnings
+          python -m pytest "usr/src/app/src/tests" -p no:warnings
 
       - name: Run flake8
         run: |
