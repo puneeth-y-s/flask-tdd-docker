@@ -48,6 +48,9 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/${{ github.repository }}:latest
+      options: --privileged
     services:
       postgres:
         image: postgres:latest
@@ -57,22 +60,13 @@ jobs:
           POSTGRES_PASSWORD: runner
         ports:
           - 5432:5432
+        options: --health-cmd="pg_isready -U runner -d users" --health-interval=10s --health-timeout=5s --health-retries=3
+    
     env:
-      DATABASE_URL: postgresql://runner:runner@postgres:5432/users
-      DATABASE_TEST_URL: postgresql://runner:runner@postgres:5432/users
+      DATABASE_URL: postgresql://runner:runner@localhost:5432/users
+      DATABASE_TEST_URL: postgresql://runner:runner@localhost:5432/users
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.12'
-
-      - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
-
       - name: Run tests
         run: |
           python -m pytest "src/tests" -p no:warnings
@@ -88,4 +82,3 @@ jobs:
       - name: Run isort check
         run: |
           python -m isort src --check-only
-
