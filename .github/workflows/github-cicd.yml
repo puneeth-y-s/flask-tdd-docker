@@ -105,7 +105,8 @@ jobs:
         image: docker:19.03.12
         options: --privileged
     env:
-      HEROKU_REGISTRY_IMAGE: registry.heroku.com/hidden-ocean-12299/web
+      HEROKU_APP_NAME: hidden-ocean-12299
+      HEROKU_REGISTRY_IMAGE: registry.heroku.com/$HEROKU_APP_NAME/web
     steps:
       # 1. Checkout the code
       - name: Checkout code
