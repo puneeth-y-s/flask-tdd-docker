@@ -67,9 +67,12 @@ jobs:
       DATABASE_TEST_URL: postgresql://runner:runner@localhost:5432/users
 
     steps:
+      - name: List directory contents
+        run: ls -R /
+
       - name: Run tests
         run: |
-          python -m pytest "src/tests" -p no:warnings
+          python -m pytest "app/src/tests" -p no:warnings
 
       - name: Run flake8
         run: |
