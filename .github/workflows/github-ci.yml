@@ -60,8 +60,8 @@ jobs:
         options: --health-cmd="pg_isready -U runner -d users" --health-interval=10s --health-timeout=5s --health-retries=3
     
     env:
-      DATABASE_URL: postgresql://runner:runner@postgres:5432/users
-      DATABASE_TEST_URL: postgresql://runner:runner@postgres:5432/users
+      DATABASE_URL: postgresql://runner:runner@localhost:5432/users
+      DATABASE_TEST_URL: postgresql://runner:runner@localhost:5432/users
 
     steps:
       - name: Checkout code
