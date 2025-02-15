@@ -107,10 +107,10 @@ jobs:
     services:
       postgres:
         image: postgres:latest
-        # env:
-        #   POSTGRES_DB: users
-        #   POSTGRES_USER: runner
-        #   POSTGRES_PASSWORD: runner
+        env:
+          POSTGRES_DB: users
+          POSTGRES_USER: runner
+          POSTGRES_PASSWORD: runner
         ports:
           - 5432:5432
 
