@@ -93,24 +93,33 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
-    needs: build
     container:
-      image: ghcr.io/${{ github.repository }}:latest  # Run the tests inside the container with PostgreSQL
-      options: --privileged  # Enable privileged mode to allow PostgreSQL to run inside the container
+      image: ghcr.io/${{ github.repository }}:latest  # Use the image created in the build stage
+      options: --privileged  # Enable privileged mode to allow PostgreSQL to run
+
+    services:
+      postgres:
+        image: postgres:latest  # Use the official PostgreSQL image as a service
+        ports:
+          - 5432:5432  # Expose PostgreSQL port
+        env:
+          POSTGRES_DB: users
+          POSTGRES_USER: runner
+          POSTGRES_PASSWORD: runner
+        options: --health-cmd="pg_isready -U runner" --health-interval=5s --health-timeout=10s --health-retries=5
 
     env:
-      DATABASE_URL: postgresql://runner:runner@localhost:5432/users  # Connect to PostgreSQL inside the container
+      # Connection details to PostgreSQL
+      DATABASE_URL: postgresql://runner:runner@localhost:5432/users
       DATABASE_TEST_URL: postgresql://runner:runner@localhost:5432/users
 
     steps:
-      - name: Print working directory
+      - name: Run pwd and list files
         run: |
+          echo "Current working directory:"
           pwd
+          echo "Listing files in the current directory:"
           ls -la
-
-      - name: Fix permissions
-        run: |
-          chmod -R 755 src/tests
 
       - name: Run tests
         run: |
