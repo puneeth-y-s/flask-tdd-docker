@@ -120,23 +120,14 @@ jobs:
       #   run: |
       #     ls -R /usr/src/app
 
-      - name: Run pytest
+      - name: Run tests and checks
         run: |
           cd /usr/src/app
+
+          # Run the tests
           python -m pytest "src/tests" -p no:warnings
-
-      # 6. Run flake8
-      - name: Run flake8
-        run: |
+          
+          # Run code style checks (flake8, black, isort)
           python -m flake8 src
-
-      # 7. Run black
-      - name: Run black
-        run: |
           python -m black src --check
-
-      # 8. Run isort
-      - name: Run isort
-        run: |
           python -m isort src --check-only
-
