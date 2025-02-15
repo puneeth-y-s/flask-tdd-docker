@@ -93,6 +93,7 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    needs: build
     container:
       image: ghcr.io/${{ github.repository }}:latest  # Run the tests inside the container with PostgreSQL
       options: --privileged  # Enable privileged mode to allow PostgreSQL to run inside the container
