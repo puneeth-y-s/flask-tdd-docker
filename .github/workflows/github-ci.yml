@@ -115,9 +115,9 @@ jobs:
           - 5432:5432
 
     steps:
-      - name: Check the contents of the container
+      - name: Check container's file structure
         run: |
-          docker run --rm ghcr.io/${{ github.repository }}:latest ls -R /usr/src/app
+          ls -R /usr/src/app
 
       - name: Run tests inside the container
         run: |
