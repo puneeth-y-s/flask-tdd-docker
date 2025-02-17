@@ -71,7 +71,7 @@ jobs:
       #   run: |
       #     ls -R /usr/src/app
 
-      - name: Install dev dependencies
+      - name: Install dependencies, run tests, and perform linting
         run: |
           python3 -m venv /tmp/env
           . /tmp/env/bin/activate
