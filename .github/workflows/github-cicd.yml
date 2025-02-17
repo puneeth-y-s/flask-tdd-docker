@@ -78,7 +78,6 @@ jobs:
           . /temp/env/bin/activate
           pip install -r requirements.txt
           pip install black==23.11.0 flake8==6.1.0 isort==5.12.0 pytest==7.4.3
-        working-directory: /usr/src/app
 
       - name: Run pytest
         run: |
