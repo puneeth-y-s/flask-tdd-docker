@@ -78,29 +78,10 @@ jobs:
           cd /usr/src/app
           pip install -r requirements.txt
           pip install black==23.11.0 flake8==6.1.0 isort==5.12.0 pytest==7.4.3
-
-      - name: Run pytest
-        run: |
           python -m pytest "src/tests" -p no:warnings
-        working-directory: /usr/src/app
-
-      # 6. Run flake8
-      - name: Run flake8
-        run: |
           python -m flake8 src
-        working-directory: /usr/src/app
-
-      # 7. Run black
-      - name: Run black
-        run: |
           python -m black src --check
-        working-directory: /usr/src/app
-
-      # 8. Run isort
-      - name: Run isort
-        run: |
           python -m isort src --check-only
-        working-directory: /usr/src/app
 
   deploy:
     runs-on: ubuntu-latest
