@@ -35,7 +35,7 @@ jobs:
           docker build \
             --cache-from ghcr.io/${{ github.repository }}:latest \
             --tag ghcr.io/${{ github.repository }}:latest \
-            --file ./Dockerfile.prod \
+            --file ./Dockerfile.prod --build-arg SECRET_KEY=${{ secrets.SECRET_KEY }} \
             .
 
       - name: Push Docker image to GitHub Container Registry
@@ -119,6 +119,7 @@ jobs:
           docker build \
             --tag $HEROKU_REGISTRY_IMAGE \
             --file ./Dockerfile.prod \
+            --build-arg SECRET_KEY=${{ secrets.SECRET_KEY }} \
             .
         
       # 6. Login to Heroku Docker registry
