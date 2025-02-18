@@ -2,10 +2,6 @@
 
 set -e
 
-echo $HEROKU_REGISTRY_IMAGE
-echo $HEROKU_APP_NAME
-echo $HEROKU_AUTH_TOKEN
-
 IMAGE_ID=$(docker inspect $HEROKU_REGISTRY_IMAGE --format={{.Id}})
 PAYLOAD='{"updates": [{"type": "web", "docker_image": "'"$IMAGE_ID"'"}]}'
 
