@@ -16,7 +16,7 @@ users_namespace = Namespace("users")
 user = users_namespace.model(
     "User",
     {
-        "id": fields.Integer(readOnly=True),
+        "id": fields.Integer(readonly=True),
         "username": fields.String(required=True),
         "email": fields.String(required=True),
         "created_date": fields.DateTime,
